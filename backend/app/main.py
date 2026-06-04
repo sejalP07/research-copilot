@@ -2,9 +2,11 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.services.ai_service import generate_answer
+from app.routers.document import router as document_router
+
 app = FastAPI(title="Research Copilot")
 
-# Enable CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
@@ -12,6 +14,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(document_router)
 
 class ResearchRequest(BaseModel):
     question: str
@@ -22,11 +26,10 @@ async def root():
 
 @app.post("/research")
 async def research(req: ResearchRequest):
-    from app.services.ai_service import generate_answer
-
-    answer = generate_answer(req.question)
+    result = generate_answer(req.question)
 
     return {
-        "answer": answer,
-        "confidence": 0.95
+        "answer": result["answer"],
+        "sources": result["sources"],
+        "confidence": 0.95,
     }

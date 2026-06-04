@@ -1,14 +1,12 @@
 from tavily import TavilyClient
-import os
+from app.core.config import TAVILY_API_KEY
 
-client = TavilyClient(
-    api_key=os.getenv("TAVILY_API_KEY")
-)
+client = TavilyClient(api_key=TAVILY_API_KEY)
 
 def search_web(query: str):
-    result = client.search(
+    response = client.search(
         query=query,
         max_results=5
     )
 
-    return result
+    return response

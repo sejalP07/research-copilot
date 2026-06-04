@@ -22,7 +22,11 @@ async def root():
 
 @app.post("/research")
 async def research(req: ResearchRequest):
+    from app.services.ai_service import generate_answer
+
+    answer = generate_answer(req.question)
+
     return {
-        "answer": f"You asked: {req.question}",
+        "answer": answer,
         "confidence": 0.95
     }

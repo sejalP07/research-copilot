@@ -1,8 +1,7 @@
 import google.generativeai as genai
 
 from app.core.config import GEMINI_API_KEY
-from app.tools.web_search_tool import search_web
-from app.services.vectorstore import retrieve_documents
+from app.agents.research_agent import gather_context
 
 genai.configure(api_key=GEMINI_API_KEY)
 
@@ -11,30 +10,56 @@ model = genai.GenerativeModel("gemini-2.5-flash")
 
 def generate_answer(question: str):
 
-    docs = retrieve_documents(question)
+    context = gather_context(question)
 
-    context = "\n\n".join(
-        [doc.page_content for doc in docs]
+    pdf_context = "\n\n".join(
+        [doc.page_content for doc in context["pdf"]]
     )
 
-    prompt = f"""
-Answer the question using the provided context.
+    web_context = ""
 
-Context:
-{context}
+    for result in context["web"]["results"]:
 
-Question:
-{question}
+        web_context += f"""
+Title: {result["title"]}
 
-If the answer is not in the context,
-say you don't know.
+Content:
+{result["content"]}
+
+URL:
+{result["url"]}
+
 """
 
-    response = model.generate_content(
-        prompt
-    )
+    prompt = f"""
+You are a professional research assistant.
+
+Use both the uploaded documents and web search results.
+
+====================
+DOCUMENT CONTEXT
+====================
+
+{pdf_context}
+
+====================
+WEB CONTEXT
+====================
+
+{web_context}
+
+====================
+QUESTION
+====================
+
+{question}
+
+Provide a detailed answer.
+"""
+
+    response = model.generate_content(prompt)
 
     return {
         "answer": response.text,
-        "sources": []
+        "sources": context["web"]["results"]
     }

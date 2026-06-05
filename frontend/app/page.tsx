@@ -3,6 +3,7 @@
 import ChatInput from "@/components/ChatInput";
 import ResearchResult from "@/components/ResearchResult";
 import { useResearch } from "@/hooks/useResearch";
+import FileUpload from "@/components/FileUpload";
 
 export default function Home() {
   const {
@@ -17,7 +18,8 @@ export default function Home() {
       <h1 className="text-4xl font-bold mb-8">
         Research Copilot
       </h1>
-
+      
+      <FileUpload />
       <ChatInput onSubmit={research} />
 
       {loading && (

@@ -2,6 +2,9 @@ import google.generativeai as genai
 
 from app.core.config import GEMINI_API_KEY
 from app.agents.research_agent import gather_context
+from app.services.history_service import (
+    save_research
+)
 
 genai.configure(api_key=GEMINI_API_KEY)
 
@@ -58,6 +61,10 @@ Provide a detailed answer.
 """
 
     response = model.generate_content(prompt)
+    save_research(
+        question,
+        response.text
+    )
 
     return {
         "answer": response.text,

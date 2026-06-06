@@ -3,7 +3,13 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.services.ai_service import generate_answer
-from app.routers.document import router as document_router
+from app.routers.document_router import router as document_router
+
+from app.routers.history_router import (
+    router as history_router
+)
+
+
 
 app = FastAPI(title="Research Copilot")
 
@@ -16,6 +22,7 @@ app.add_middleware(
 )
 
 app.include_router(document_router)
+app.include_router(history_router)
 
 class ResearchRequest(BaseModel):
     question: str

@@ -30,3 +30,13 @@ AI-powered research assistant that can:
 ## Status
 
 🚧 Currently in development
+
+## Features
+
+- Gemini AI powered research assistant
+- Tavily web search integration
+- PDF document upload
+- Retrieval Augmented Generation (RAG)
+- Supabase cloud storage and database
+- Research history tracking
+- Source citations and confidence scoring

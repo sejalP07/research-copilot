@@ -2,8 +2,10 @@
 
 import ChatInput from "@/components/ChatInput";
 import ResearchResult from "@/components/ResearchResult";
+import ResearchHistory from "@/components/ResearchHistory";
+
 import { useResearch } from "@/hooks/useResearch";
-import FileUpload from "@/components/FileUpload";
+import { useHistory } from "@/hooks/useHistory";
 
 export default function Home() {
   const {
@@ -11,25 +13,36 @@ export default function Home() {
     answer,
     sources,
     research,
-} = useResearch();
+  } = useResearch();
+
+  const { history } = useHistory();
 
   return (
-    <main className="max-w-4xl mx-auto p-10">
-      <h1 className="text-4xl font-bold mb-8">
-        Research Copilot
-      </h1>
-      
-      <FileUpload />
-      <ChatInput onSubmit={research} />
+    <main className="flex min-h-screen">
+      <ResearchHistory
+        history={history}
+      />
 
-      {loading && (
-        <p className="mt-4">Researching...</p>
-      )}
+      <div className="flex-1 p-10">
+        <h1 className="text-4xl font-bold mb-8">
+          Research Copilot
+        </h1>
 
-     <ResearchResult
-  answer={answer}
-  sources={sources}
-    />
+        <ChatInput
+          onSubmit={research}
+        />
+
+        {loading && (
+          <p className="mt-4">
+            Researching...
+          </p>
+        )}
+
+        <ResearchResult
+          answer={answer}
+          sources={sources}
+        />
+      </div>
     </main>
   );
 }

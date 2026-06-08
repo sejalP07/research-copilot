@@ -11,34 +11,42 @@ export function useDocuments() {
   const [documents, setDocuments] =
     useState<Document[]>([]);
 
-  const fetchDocuments =
-    async () => {
-      try {
-        const response =
-          await axios.get(
-            "http://localhost:8000/documents/list"
-          );
-
-        setDocuments(
-          response.data
-        );
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-  const deleteDocument =
-    async (id: string) => {
-      try {
-        await axios.delete(
-          `http://localhost:8000/documents/${id}`
+  const fetchDocuments = async () => {
+    try {
+      const response =
+        await axios.get<Document[]>(
+          "http://localhost:8000/documents/list"
         );
 
-        fetchDocuments();
-      } catch (error) {
-        console.error(error);
-      }
-    };
+      setDocuments(response.data);
+    } catch (error) {
+      console.error(
+        "Error fetching documents:",
+        error
+      );
+    }
+  };
+
+  const deleteDocument = async (
+    id: string
+  ) => {
+    try {
+      await axios.delete(
+        `http://localhost:8000/documents/${id}`
+      );
+
+      await fetchDocuments();
+    } catch (error) {
+      console.error(
+        "Error deleting document:",
+        error
+      );
+    }
+  };
+
+  const refreshDocuments = () => {
+    fetchDocuments();
+  };
 
   useEffect(() => {
     fetchDocuments();
@@ -48,5 +56,6 @@ export function useDocuments() {
     documents,
     deleteDocument,
     fetchDocuments,
+    refreshDocuments,
   };
 }

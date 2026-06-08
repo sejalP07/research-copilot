@@ -1,11 +1,9 @@
-from app.services.vectorstore import retrieve_documents
+from app.services.retrieval_service import (
+    search_documents
+)
 
-docs = retrieve_documents(
+results = search_documents(
     "What is Artificial Intelligence?"
 )
 
-print("\nRetrieved Documents:\n")
-
-for doc in docs:
-    print(doc.page_content)
-    print("-" * 50)
+print(results)

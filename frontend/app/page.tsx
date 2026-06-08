@@ -3,9 +3,11 @@
 import ChatInput from "@/components/ChatInput";
 import ResearchResult from "@/components/ResearchResult";
 import ResearchHistory from "@/components/ResearchHistory";
+import DocumentList from "@/components/DocumentList";
 
 import { useResearch } from "@/hooks/useResearch";
 import { useHistory } from "@/hooks/useHistory";
+import { useDocuments } from "@/hooks/useDocuments";
 
 export default function Home() {
   const {
@@ -15,7 +17,14 @@ export default function Home() {
     research,
   } = useResearch();
 
-  const { history } = useHistory();
+  const {
+    history,
+  } = useHistory();
+
+  const {
+    documents,
+    deleteDocument,
+  } = useDocuments();
 
   return (
     <main className="flex min-h-screen">
@@ -41,6 +50,13 @@ export default function Home() {
         <ResearchResult
           answer={answer}
           sources={sources}
+        />
+
+        <DocumentList
+          documents={documents}
+          deleteDocument={
+            deleteDocument
+          }
         />
       </div>
     </main>

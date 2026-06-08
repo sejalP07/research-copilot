@@ -4,6 +4,7 @@ import ChatInput from "@/components/ChatInput";
 import ResearchResult from "@/components/ResearchResult";
 import ResearchHistory from "@/components/ResearchHistory";
 import DocumentList from "@/components/DocumentList";
+import FileUpload from "@/components/FileUpload";
 
 import { useResearch } from "@/hooks/useResearch";
 import { useHistory } from "@/hooks/useHistory";
@@ -24,10 +25,11 @@ export default function Home() {
   const {
     documents,
     deleteDocument,
+    refreshDocuments,
   } = useDocuments();
 
   return (
-    <main className="flex min-h-screen">
+    <main className="flex min-h-screen bg-gray-50">
       <ResearchHistory
         history={history}
       />
@@ -37,6 +39,14 @@ export default function Home() {
           Research Copilot
         </h1>
 
+        {/* PDF Upload Section */}
+        <FileUpload
+          onUploadSuccess={
+            refreshDocuments
+          }
+        />
+
+        {/* Research Section */}
         <ChatInput
           onSubmit={research}
         />
@@ -52,6 +62,7 @@ export default function Home() {
           sources={sources}
         />
 
+        {/* Documents Section */}
         <DocumentList
           documents={documents}
           deleteDocument={

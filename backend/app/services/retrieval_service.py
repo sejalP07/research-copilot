@@ -1,7 +1,7 @@
 from app.core.pinecone_client import index
 
 
-def search_documents(
+def get_context(
     query: str
 ):
     results = index.search_records(
@@ -14,4 +14,12 @@ def search_documents(
         }
     )
 
-    return results
+    context = ""
+
+    for hit in results.result.hits:
+        context += (
+            hit.fields["text"]
+            + "\n\n"
+        )
+
+    return context

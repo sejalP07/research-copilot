@@ -1,10 +1,11 @@
 from app.core.supabase_client import supabase
 
+
 def upload_pdf(
     file_name: str,
     file_bytes: bytes
 ):
-    path = file_name
+    path = f"documents/{file_name}"
 
     supabase.storage.from_(
         "documents"
@@ -13,4 +14,10 @@ def upload_pdf(
         file_bytes
     )
 
-    return path
+    file_url = (
+        supabase.storage
+        .from_("documents")
+        .get_public_url(path)
+    )
+
+    return file_url

@@ -9,13 +9,13 @@ def store_chunks(
 
     for i, chunk in enumerate(chunks):
         records.append(
-            {
-                "_id": f"{document_name}-{i}",
-                "text": chunk,
-                "document": document_name,
-            }
-        )
-
+        {
+        "_id": f"{document_name}-{i}",
+        "text": chunk,
+        "document": document_name,
+        "chunk_number": i
+        })    
+        
     result = index.upsert_records(
         namespace="__default__",
         records=records

@@ -1,9 +1,10 @@
 from pypdf import PdfReader
 
 
-def extract_text(
+def extract_pdf_text(
     file_path: str
-):
+) -> str:
+
     reader = PdfReader(
         file_path
     )
@@ -11,9 +12,43 @@ def extract_text(
     text = ""
 
     for page in reader.pages:
-        text += (
+
+        page_text = (
             page.extract_text()
-            or ""
         )
 
+        if page_text:
+            text += (
+                page_text + "\n"
+            )
+
     return text
+
+
+def extract_pdf_pages(
+    file_path: str
+):
+
+    reader = PdfReader(
+        file_path
+    )
+
+    pages = []
+
+    for page_num, page in enumerate(
+        reader.pages,
+        start=1
+    ):
+
+        text = page.extract_text()
+
+        if text:
+
+            pages.append(
+                {
+                    "page": page_num,
+                    "text": text
+                }
+            )
+
+    return pages

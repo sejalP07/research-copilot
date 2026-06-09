@@ -2,7 +2,13 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.services.ai_service import generate_answer
+from app.services.ai_service import (
+    generate_answer
+)
+
+from app.services.report_service import (
+    generate_report
+)
 
 from app.routers.document_router import (
     router as document_router
@@ -72,4 +78,17 @@ async def research(
 
         "confidence":
             0.95,
+    }
+
+
+@app.post("/research/report")
+async def research_report(
+    req: ResearchRequest
+):
+    report = generate_report(
+        req.question
+    )
+
+    return {
+        "report": report
     }
